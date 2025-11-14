@@ -1,3 +1,5 @@
+import os
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Dict
@@ -16,6 +18,11 @@ class Nota(BaseModel):
 # -----------------------------
 #        ENDPOINTS
 # -----------------------------
+
+# GET - Endpoint principal
+@app.get("/")
+def home():
+    return {"message": "API de notas funcionando correctamente 🚀"}
 
 # GET - Obtener todas las notas
 @app.get("/notas")
@@ -47,3 +54,11 @@ def eliminar_nota(id_nota: int):
 
     nota_eliminada = notas_db.pop(id_nota)
     return {"mensaje": "Nota eliminada", "nota": nota_eliminada}
+
+# -----------------------------
+#     SERVIDOR PARA RENDER
+# -----------------------------
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
